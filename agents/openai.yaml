@@ -1,0 +1,4 @@
+interface:
+  display_name: "数据开发文档"
+  short_description: "生成配套 Markdown 与交互式 HTML，说明业务口径、表关系和字段血缘"
+  default_prompt: "使用 $data-development-docs，基于当前项目需求、SQL 和表结构，生成内容一致的 Markdown 与交互式 HTML 数据开发文档。"
