@@ -26,7 +26,7 @@
 
 - 先按来源事实列出“输入对象 → 处理节点 → 输出对象”的关系，再布置图形。线条只能表达明确的数据流或处理关系；图中每个主要输入、分支、汇合与结果都要有可追踪的去向。
 - 主流程纵向、自上而下。真正并行的来源或逻辑可以在同层横向并列，再向下汇合；不得为了排版把主方向改成横向，也不得把并行关系画成串行。
-- 具体的分层、同层排序、正交通道和交叉验收按 [HTML 阅读与交互规范](html-reading-view.md#总图拓扑与连线)执行。交付图要求零交叉、零重叠；单图无法无交叉呈现时，按真实阶段边界拆成相邻局部图并标出输入/输出衔接。
+- 关系建模、分层、同层排序、正交通道、交叉消除和几何验收统一按[内置流程图绘制方法](flow-diagram-method.md)执行。不能仅凭人工目测判定连线清楚；在拓扑允许时交付图要求零交叉、零重叠、零贴线，密集拓扑按该方法处理并保留端到端关系。
 - 节点使用简短中文动宾结构或业务结论。辅助说明另起一行；长内容扩宽节点、换行或移到同步的详情区。节点边框必须容纳文字，不能裁切或溢出。
 - 用户已确认的流向方式是沿线动效，不使用箭头。静态轨道至少 2.5px、保持不透明并使用可见的中深色；动效线/移动标记至少 3px，使用与节点协调且容易辨认的颜色。关键连线对比度目标不低于 3:1；线条仍不清楚时优先加深、加粗和拉开分支间距，不通过灰化或降低透明度处理。动效方向严格符合数据关系，平行线可错开节奏。阶段高亮只加浅底，流程图原有节点和连线配色保持稳定。减少动态效果时显示完整静态流线。
 - 总图在页面阅读时持续可见，并与左侧阶段导航、当前阶段背景高亮、右侧详情和读写对象同步。阶段和图节点可定位到同页相应内容，不打开侧栏或跳出当前页面。
@@ -49,7 +49,7 @@
 - [frontend-design](https://github.com/anthropics/skills/tree/main/skills/frontend-design)：视觉方向由主题和使用场景决定，形成明确的设计选择并减少模板化装饰。
 - [plannotator/effective-html](https://github.com/plannotator/effective-html)：自包含 HTML、内容优先、语义结构、响应式和无障碍设计。
 - [alchaincyf/huashu-design](https://github.com/alchaincyf/huashu-design)：真实内容驱动版式、重视文字排版，并检查实际浏览器中的呈现效果。
-- [diagram-design](https://github.com/cathrynlavery/diagram-design/tree/main/skills/diagram-design)：先选合适的图示表达，控制连线交叉、节点可读性、SVG 可访问性和动效降级。
+- [diagram-design](https://github.com/cathrynlavery/diagram-design/tree/main/skills/diagram-design)：其适用于本任务的关系建模、布局、连线和 SVG 方法已经整理为[本 skill 的内置流程图规范](flow-diagram-method.md)，生成时不需要另行加载外部 skill。
 - [MDN：Semantic HTML](https://developer.mozilla.org/en-US/curriculum/core/semantic-html/) 与 [MDN：HTML accessibility](https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/Accessibility/HTML)：正确使用语义元素、标题层级、链接文本、键盘可达性和图文替代说明。
 
 用户对当前 skill 的明确规则高于这些通用参考。例如，常见流程图工具使用箭头，但本 skill 的方案图使用动线表现流向且不画箭头；数据对象按角色和适用范围的行列关系展示，但不用 HTML 表格或卡片。
