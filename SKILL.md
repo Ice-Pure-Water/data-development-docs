@@ -18,7 +18,7 @@ metadata:
 5. **从规格 Markdown 生成主页。** 默认生成自包含 HTML，严格以刚生成或用户指定的规格 Markdown 为内容来源，并按 [HTML 阅读与交互规范](references/html-reading-view.md)、[流程图绘制方法](references/flow-diagram-method.md)、[文字展示方法](references/text-display-method.md)和[文字与视觉设计准则](references/writing-and-visual-design.md)实现。先建立一致的文字角色和总览/讲解/细节/参考层级，再排版。主页呈现标题摘要、需求/参考链接、整体数据流程、全部可独立讲解的业务逻辑、按角色和适用范围组织的数据对象、字段血缘和方案来源。流程图必须按内置流程图方法先建关系模型、分层与路由，再生成图并逐条检查几何关系；不得只凭视觉直觉连线。数据对象独立于流程图，以“表作用为行、适用范围为列”的对齐分区展示，不塞入流程节点，不做 HTML 表格或卡片。
 6. **按需生成完整规格 HTML。** 只有用户明确要求独立完整规格页时，才额外生成该 HTML 页面。完整页从同一规格 Markdown 转换，按章节组织并与主页互链，仍遵循方案范围。
 7. **表达链接与对象。** 需求文档和非本项目参考资料在标题摘要下方展示可点击名称。项目内 Markdown 可作方案来源链接；已有或设计中的 DDL 可在对象附近链接，并明确“方案目标”和“DDL 定义对象”的命名差异。项目处理 SQL 不作为页面链接或内容。若 Markdown 明确列出外部参考 SQL 且用户要求展示来源，可仅保留一个命名清楚的外部参考链接，不摘录 SQL、不把它当成本项目实现事实。
-8. **完成页面核对。** 对照 Markdown 内容清单检查所有阶段、业务规则、对象和字段均有归属；检查标题、交叉链接、锚点、相对 DDL/Markdown 链接、无脚本可读性和窄屏结构。只核对转换产物，不验证 SQL、数据库、业务结果或测试数据。
+8. **完成页面核对。** 对照 Markdown 内容清单检查所有阶段、业务规则、对象和字段均有归属；检查标题、交叉链接、锚点、相对 DDL/Markdown 链接、无脚本可读性和电脑端宽屏布局。只核对转换产物，不验证 SQL、数据库、业务结果或测试数据。
 
 ## 内容抽取清单
 
@@ -42,5 +42,5 @@ metadata:
 
 ## 参考
 
-- 规格 Markdown 结构、事实追溯，以及 HTML 页面结构、纵向三栏流程联动、逻辑专题、数据对象二维分区、无障碍和窄屏行为见 [HTML 阅读与交互规范](references/html-reading-view.md)。流程图按[流程图绘制方法](references/flow-diagram-method.md)执行；文字层级、分区排版、中文换行和可读性检查按[文字展示方法](references/text-display-method.md)执行；中文表达和视觉方向见[文字与视觉设计准则](references/writing-and-visual-design.md)。流程图和文本展示方法均已内置，后续调用无需依赖外部 skill。
+- 规格 Markdown 结构、事实追溯，以及 HTML 页面结构、纵向三栏流程联动、逻辑专题、数据对象二维分区、无障碍和电脑端宽屏行为见 [HTML 阅读与交互规范](references/html-reading-view.md)。流程图按[流程图绘制方法](references/flow-diagram-method.md)执行；文字层级、分区排版、中文换行和可读性检查按[文字展示方法](references/text-display-method.md)执行；中文表达和视觉方向见[文字与视觉设计准则](references/writing-and-visual-design.md)。流程图和文本展示方法均已内置，后续调用无需依赖外部 skill。
 - 规范中的颜色、尺寸和交互数值是通用起点，应按内容密度和视口调整；不得把其他项目的业务事实复制到当前输入。
