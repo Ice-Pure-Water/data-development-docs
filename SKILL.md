@@ -1,43 +1,46 @@
 ---
 name: data-development-docs
-description: Create or maintain one combined data development document and data specification that connects the overall solution and business requirements to processing logic and output field lineage.
+description: Transform one or more existing data proposal Markdown documents into a standardized data specification Markdown document, then generate a presentation-ready HTML page from it. Use when the user asks to organize proposal documents into a specification and create a coordinated HTML view. Do not implement processing logic.
 metadata:
-  short-description: Combined data development document and data specification
+  short-description: Standardize data proposal Markdown and generate presentation HTML
 ---
 
-# Data Development Document and Data Specification
+# 数据方案 Markdown 转规格文档与 HTML
 
-Maintain one authoritative document for each data deliverable: a combined data development document and data specification. Connect the overall solution and business rules to actual source tables, configuration/dictionary tables, core models, result tables, processing logic, and output field lineage. Keep agreed requirements, implementation facts, design proposals, and unresolved decisions distinct. Do not add test plans/results, validation, acceptance, progress, release, or operations sections unless the user explicitly asks for them. Write the specification so business, development, and test readers can understand inputs, boundaries, transformations, and expected data; do not center it on data consumers or end-user scenarios.
+本 skill 的核心工作是把一种或多种用户提供的方案 Markdown，依据适用的数据规格文档规则，整理成结构统一、事实可追溯的数据规格 Markdown；然后以该规格 Markdown 为唯一内容来源生成展示型 HTML。它面向不同业务和项目，不预设行业、阶段数量、表名、逻辑条目、环境名称或字段。保留方案目标、业务规则、数据流、数据对象、字段血缘和明确的未决口径；排除实现 SQL、测试验证、进度、发布运维和数据使用者说明。
 
-Deliver Markdown as the editable source. Create HTML views when requested or when they materially improve communication. For presentation plus lookup use, keep the visual-first homepage separate from the full specification page; derive both from the same facts. The homepage presents the data solution proposal and structure. It may show existing or proposed DDL, but does not contain implementation SQL walkthroughs, test/verification work, progress, deployment, or operations. The full specification page keeps the established detailed-document role and is not subject to the homepage's shorter presentation boundary. Read [references/html-reading-view.md](references/html-reading-view.md) for the distinction.
+## 工作步骤
 
-## Workflow
+1. **确定规则与输入输出。** 确认来源方案 Markdown、适用的数据规格文档规则、规格 Markdown 输出路径、HTML 输出路径，以及用户是否要求独立完整规格 HTML。用户提供的规格模板/规则文件优先；未单独提供时，以本 skill 的规格结构与范围规则为默认标准。读取来源及其明确引用的需求材料；仅在说明结构需要时读取关联 DDL。不搜索处理 SQL、程序、运行记录或数据库状态。
+2. **抽取来源事实。** 逐份阅读来源 Markdown，建立带来源位置的事实清单，涵盖目标、数据流、阶段、数据对象、全部可独立说明的业务判断、字段血缘、术语、需求/参考链接、冲突和未决口径。所有数量和名称来自输入，不设固定值。
+3. **生成规范规格 Markdown。** 按数据规格规则重组来源事实，生成结构统一、可独立阅读、可编辑、可追溯的规格 Markdown。保留方案范围内的细节；相同事实去重，矛盾事实并列说明并标“待确认”，不自行选口径。重要事实应标注来源章节、文件或链接。Markdown 是最终事实基线，HTML 不作为编辑源。
+4. **规范表达并控制范围。** 只整理目标、数据流、处理规则、数据对象和字段来源。剔除实现文件名、SQL 表达式、清理/重跑方式、实际执行或部署状态、测试结果、进度、运维及用户说明。业务规则中的日期等条件应保留；中文术语按上下文统一。不得补写来源未支持的字段、条件或结论。
+5. **从规格 Markdown 生成主页。** 默认生成自包含 HTML，严格以刚生成或用户指定的规格 Markdown 为内容来源，并按 [HTML 阅读与交互规范](references/html-reading-view.md)实现。主页呈现标题摘要、需求/参考链接、整体数据流程、全部可独立讲解的业务逻辑、按输入维度组织的数据对象矩阵、字段血缘和方案来源。不得把数据对象清单并入流程节点。
+6. **按需生成完整规格 HTML。** 只有用户明确要求独立完整规格页时，才额外生成该 HTML 页面。完整页从同一规格 Markdown 转换，按章节组织并与主页互链，仍遵循方案范围。
+6. **表达链接与对象。** 需求文档和非本项目参考资料在标题摘要下方展示可点击名称。项目内 Markdown 可作方案来源链接；已有或设计中的 DDL 可在对象附近链接，并明确“方案目标”和“DDL 定义对象”的命名差异。项目处理 SQL 不作为页面链接或内容。若 Markdown 明确列出外部参考 SQL 且用户要求展示来源，可仅保留一个命名清楚的外部参考链接，不摘录 SQL、不把它当成本项目实现事实。
+7. **完成页面核对。** 对照 Markdown 内容清单检查所有阶段、业务规则、表和字段均有归属；检查标题、交叉链接、锚点、相对 DDL/Markdown 链接、无脚本可读性和窄屏结构。只核对转换产物，不验证 SQL、数据库、业务结果或测试数据。
 
-1. **Identify the deliverable and readers.** Establish purpose, scope, business/development/test readers, and source materials. Inspect project instructions, requirements, existing documentation, code/SQL, schemas/DDL, and configuration as relevant. Do not add data-owner, data-user, or consumer sections unless they are explicitly in scope.
-2. **Separate requirement from implementation.** Distinguish agreed business rules, proposed design, current code/schema behavior, and unresolved decisions. Do not present a proposal as an agreed rule or infer behavior that the sources do not establish.
-3. **Use contextual Chinese terminology.** Write reader-facing explanations in natural Simplified Chinese. Follow the concise, plain-language approach in [leter/zh-tech-writing](https://github.com/leter/zh-tech-writing), while adapting it to this data domain: choose terms from business context instead of translating English word by word. Avoid invented jargon and literal calques; where a standard Chinese term is unclear, explain the concept in everyday Chinese and put the exact technical name in parentheses once. Keep SQL identifiers, table/field names, product names, and source-native values exact. Create a small glossary when a concept has multiple plausible Chinese labels: give the chosen Chinese display term, exact technical name, and definition; use the chosen label consistently. Do not impose a fixed sentence-length rule on complex business conditions; split them only when the meaning stays precise. Keep diagram labels concise, but never truncate technical identifiers.
-4. **Describe the business specification.** Capture purpose, scope, grain, keys, field meaning, constraints, inclusion/exclusion boundaries, precedence, exceptions, resulting values, and unresolved decisions. State rules so business, development, and test readers can interpret them consistently. Cover producer/consumer contracts, access, ownership, or compatibility only when the user explicitly asks or they materially define the requested data specification; omit test plans and quality gates.
-5. **Trace tables, processing, and fields.** Inventory actual source tables, mapping/configuration/reference tables, core/intermediate models, and result tables. For each, state its role, grain/key when known, and where it is read or written; distinguish code references and target DDL from confirmed deployment. Explain ordered transformations, selection/merge rules, outputs, and material edge behavior. Connect every important output field to its source/value, derivation, and responsible processing step or code. Use [references/document-model.md](references/document-model.md) and [references/lineage-and-implementation.md](references/lineage-and-implementation.md) for the content model and field mapping.
-6. **Resolve only material ambiguity.** Inspect files and schemas for facts that can be established directly. Ask about business choices only when different answers materially change the solution or specification. Use `data-grilling` when a structured clarification round is needed.
-7. **Generate the HTML homepage from the settled proposal.** Treat the Markdown specification, requirements, reference materials, and existing/proposed DDL as canonical inputs; derive the project summary, rules, proposed objects, and field lineage from them instead of re-entering a second independent version. For substantial HTML, first read [references/html-reading-view.md](references/html-reading-view.md) and follow its homepage sequence exactly: subject title and source links; test/formal table blocks; overall process; linked business/process details; field lineage. Keep the title introduction focused on the deliverable and project summary. The homepage does not contain implementation SQL walkthroughs, test/verification work, progress, deployment, or operations. Existing or proposed DDL may establish table shape and environment placement. For the overview, show a rendered diagram, not Mermaid source text. Preserve the proposed topology: every in-scope input must have a visible path to an output or a clearly marked unresolved boundary; status selection and attribute aggregation stay separate until their specified join; configuration dependencies are visible or explained adjacent to the diagram. Keep physical database/table inventories in separate blocks outside the process diagram, with full object name, environment, role, and whether the structure is existing, proposed, or unresolved. Keep the main flow, business concerns, and primary field paths visible in the reading sequence. Process nodes and detail sections use same-page anchors; a compact process rail tracks the detail section in view. Keep the full specification page in its established role, with exhaustive rules and field details. Render local Markdown links as HTML anchors with working relative `href` values; never expose Markdown bracket/link syntax in the finished page. For moving flow lines, animate only real connector paths with restrained packets and honor `prefers-reduced-motion`. Fit every node label by wrapping or resizing; keep exact technical identifiers intact. Read [references/html-reading-view.md](references/html-reading-view.md) when creating or substantially changing HTML.
-8. **Review the document handoff.** State the Markdown and HTML locations, covered scope, key unresolved decisions, and any source ambiguity that affects the specification. Do not create a separate testing or validation deliverable as part of this skill.
+## 内容抽取清单
 
-## Reference routing
+- **标题摘要：** 业务对象、目标、主要数据流、结果对象。只写方案内容，不写“HTML 页面功能”“面向业务/开发/测试人员”或项目状态。
+- **来源与参考：** 需求文档、外部参考、项目 Markdown、DDL。标题下面列出需求和外部参考链接；库表相关 DDL 放在对象区。参考 SQL 仅按第 6 步保留其链接。
+- **整体流程：** 按输入的实际阶段和数据关系表达来源、处理、分支、并行、汇合和结果。不得套用固定行业流程；流程节点表达业务处理，库名和表名放在右侧读写说明和独立对象矩阵。
+- **阶段联动：** 每个阶段必须在左侧有名称/摘要，在中央总览图有对应节点或区域，在右侧有详情及读取/写入对象。滚动、点击阶段和点击节点时，三处同步更新。
+- **独立关键逻辑：** 从 Markdown 的规则表、正文、条件、例外和待确认项逐条枚举所有可单独讲解的判断。每项至少有结论式标题、可见的一句摘要、展开后的条件/处理/结果/例外。细节彼此独立时分别成项；阶段详情仍保留上下文，不因专题重复而删除。
+- **数据对象矩阵：** 行按输入中的对象角色分类，常见为来源、配置、中间、结果；列按输入明确的适用范围组织，如环境、阶段、地域或版本，不默认固定为正式/测试。各格展示库名、完整对象名、用途和方案/DDL关系。没有对象时写明“未列对象”或“待确认”。
+- **字段血缘：** 列出目标字段、业务含义/粒度、来源字段、推导规则、处理阶段、空值/冲突规则。依据 Markdown 和 DDL，不从 SQL 或程序补齐。
+- **完整规格页：** 只在被要求时按 Markdown 章节组织。可以包含业务规则表、代码/状态映射表、字段血缘、库表/配置表、JSON 契约和术语；这些表中的每行都要能回溯到来源 Markdown。
 
-- Read [references/document-model.md](references/document-model.md) for the shared content model and reader-oriented structure.
-- Read [references/data-contracts.md](references/data-contracts.md) only when the requested scope explicitly includes a producer/consumer data contract.
-- Read [references/lineage-and-implementation.md](references/lineage-and-implementation.md) when mapping output fields to their sources, transformations, and implementation steps.
-- Read [references/html-reading-view.md](references/html-reading-view.md) when generating or reviewing a visual HTML version.
-- Use [templates/data-development-specification.md](templates/data-development-specification.md) as a starting scaffold when a blank document is needed; omit sections that do not apply.
+## 范围边界
 
-## Optional skill routing
+- 输入是一种或多种既有方案 Markdown；输出包括规范化规格 Markdown 和从它生成的 HTML。不得把推测写成业务事实，不实现数据逻辑或编写处理 SQL。
+- 页面不呈现 SQL 内容、SQL 文件清单、测试计划/结果、运行验证、部署状态、发布运维、清理/重跑步骤或数据使用者说明。
+- 不把方案对象写成已部署对象。结构以对应 DDL 的声明为准；DDL 仅定义结构，不能证明数据库当前状态。
+- 数据对象适用范围以输入为准；测试结果、测试运行记录和验证状态不属于规格展示。
+- 中文名依上下文选取并贯穿页面；技术字段、表、库、代码值、日期和业务专名保持原文。首次出现英文缩写时可添加短中文解释。
+- 不在标题中放 V1/V2/V3、内部别名或项目代号。确有版本区分需求时，仅在规格元数据中按用户明确要求展示。
 
-Use `frontend-design` for substantial HTML visual design or redesign, `diagram-design` when a data-flow or lineage diagram materially improves understanding, and `web-design-guidelines` for a focused interaction/accessibility audit. These skills have distinct responsibilities: this skill owns factual structure and business/processing rules; the helpers own visual composition, diagram topology, and interface review. Use `research` when external standards or authoritative facts need investigation. These skills are conditional helpers; ordinary documentation does not require loading all of them.
+## 参考
 
-## Completion criteria
-
-- One document explains the overall solution, business specification, processing logic, and field lineage in that reading order unless the user requests another order.
-- Proposed design, current implementation, and unresolved business decisions are distinguishable.
-- Each important output field has a source or derivation, responsible processing step, and material null/conflict/default behavior.
-- The flow diagram, section links, and field references point to the matching details.
-- Markdown and HTML, when both produced, agree on facts and terminology.
+- 规格 Markdown 结构、事实追溯，以及 HTML 页面结构、三栏流程联动、逻辑专题、数据对象矩阵、视觉参数、无障碍和窄屏行为见 [HTML 阅读与交互规范](references/html-reading-view.md)。
+- 规范中的颜色、尺寸和交互数值是通用起点，应按内容密度和视口调整；不得把其他项目的业务事实复制到当前输入。
