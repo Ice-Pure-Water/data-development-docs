@@ -28,6 +28,41 @@ When choosing a design workflow, compare it against the artifact rather than cho
 
 This comparison is routing guidance, not a required external dependency. Choose the interface from its use: a reading task favors a navigable document, while a presentation or walkthrough should lead with the solution diagram and keep primary facts visible as one continuous story. Preserve project and user visual preferences over any reference style library.
 
+### Stable page blueprint
+
+Use this default page sequence for a presentation overview unless the user requests another composition:
+
+1. **Persistent top navigation:** deliverable name at left; anchors to overall flow, data objects, business rules, and field lineage; a direct link to the full specification page. Keep it available while scrolling without obscuring content.
+2. **Title and introduction:** one subject-specific title, a short paragraph explaining the data solution and its scope, then clickable external requirement/reference links immediately below. Do not put implementation details or HTML mechanics in the title.
+3. **Scope and implementation boundary:** state the business scope and current SQL/DDL boundary in plain language. Visually separate agreed requirements, implemented logic, planned inputs, and unresolved choices.
+4. **Overall process diagram:** a rendered, readable diagram showing the real source-to-result logic. Use concise Chinese labels with exact identifiers only where they help identify the stage. Explain the diagram’s key distinction in one adjacent sentence.
+5. **Separate object inventory:** a compact, grouped table for source data, configuration/dictionaries, intermediate/core tables, and result tables. Show development/test and formal stages separately, with database-qualified names, role/grain/key, SQL reference versus DDL target, and deployment status only when evidenced. Keep these names out of process nodes.
+6. **Key business rules:** show the handful of rules that determine the result, with requirement and implementation kept side by side. Link to full rule detail.
+7. **Primary output lineage:** show each important output field’s origin, derivation, responsible step/code, and null/conflict/default behavior. Link to full field details.
+8. **Footer:** identify the canonical Markdown source as an actual relative HTML link, or omit the attribution. Do not print Markdown link syntax into HTML text.
+
+This order is a content contract, not a demand for repeated cards. Use headings, tables, and a small number of meaningful grouped surfaces. The opening view should let a reader see the solution, object groups, key rules, and important result fields without opening a side panel.
+
+### Flow completeness and drawing rules
+
+Before drawing, write a compact edge list from the source facts: `input → operation → output`. Include separate edges for state selection and attribute aggregation when they are distinct. Compare every edge in that list with the rendered graph. A node does not count as connected because nearby prose describes its relationship.
+
+- Every in-scope input must either reach its documented processing step and output, or end at a clearly labeled “待接入/未确认” point. An input that is only in scope for a future design must not appear as implemented.
+- Each meaningful processing operation has its real inputs and outputs. Check both branches into a merge, the selection result into post-processing, and the post-processed result into the final table. No terminal output may be visually orphaned.
+- Keep status election and non-status attribute collection as parallel paths where the implementation does so. Join them only at the operation documented by SQL or the design. Do not infer that the winning status row supplies grant dates, tags, or other fields.
+- Use an explicit adjacent note or legend for implemented, planned, and unresolved paths; line style and color reinforce those labels but do not replace them.
+- Prefer a layered left-to-right flow with aligned stages, ample whitespace, and separate routing lanes. Route connectors behind nodes, avoid crossings and long loops, and split an overloaded overview into a small overview plus a focused detail diagram.
+- Keep database-qualified table names in the separate object inventory. The diagram names logical sources and processing stages; only include a table name in a node when the user specifically asks for a table relationship diagram.
+- For a hand-authored SVG, use a `viewBox`, responsive width, accessible `title` and `desc`, links for meaningful nodes, and explicit SVG paths for every edge. If the diagram becomes dense, use Graphviz/ELK or a second focused view rather than compressing labels.
+
+### Visual defaults for this user's data documents
+
+When the user has not requested a new visual direction, preserve the approved light, editorial technical-document style: pale gray-blue page background, white reading surfaces, dark navy text, muted blue-gray rules, restrained blue emphasis, thin rounded orthogonal connectors, small arrowheads, and generous gaps between stages. Avoid a generic dashboard/card grid, gradients, oversized metrics, or decorative color coding. Keep the diagram visually dominant but let rule and lineage tables remain easy to scan. These are defaults, not restrictions when a project already has an established design.
+
+When motion improves direction reading, animate a small packet along the actual SVG connector path (for example, an SVG `<circle>` with `<animateMotion>` and a path reference). Use different start offsets for simultaneous paths, low contrast and slow motion; keep the static connector visible. Respect `prefers-reduced-motion` by removing the packet animation while retaining arrowheads and paths. Do not use moving dashes that imply data on a connector that is not part of the actual flow.
+
+For a predictable continuous page, use one content column plus a narrow process-navigation rail on wide screens; keep the main content width near 1100–1400 px, and let the page itself scroll. On narrow screens, make the navigation a horizontally scrollable anchor row and allow only diagrams/tables to scroll locally. Keep the full document as a separate page when it contains exhaustive rules or field mappings; use the same terms, object names, and facts on both pages.
+
 ## Reader hierarchy
 
 Start from the audience's primary task. For data specification and development documents, use this default priority unless the user gives another order:
