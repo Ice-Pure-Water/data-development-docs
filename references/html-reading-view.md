@@ -1,164 +1,124 @@
-# HTML Presentation and Specification Views
+# 数据方案规格 Markdown 与 HTML 生成规范
 
-Use this reference when a user requests HTML or when visual presentation or navigation materially helps readers understand a data specification. Markdown remains the editable source of facts. HTML may be a visual presentation, a full specification page, or both as separate views; it must not become a conflicting source of truth. In the two-page model, the **homepage** is a solution proposal and presentation. It may show existing and proposed DDL as structural evidence, but excludes implementation SQL walkthroughs, test/verification plans or results, progress, deployment, release, and operations. The separate full specification page retains its established detailed-document role and source facts.
+本规范用于把不同业务的方案 Markdown 先整理为统一的数据规格 Markdown，再从规格 Markdown 生成适合展示、讲解、逐层阅读的 HTML。它规定规格内容结构及可复用的页面关系、交互和视觉约束；业务事实、阶段数量、对象角色、适用范围和术语必须按当前输入重新抽取，不得照搬其他项目。
 
-## Choose the right design help
+## 规格 Markdown 结构
 
-These skills solve different problems. Route to them by the work required; do not treat one as a substitute for the others.
+规格 Markdown 是本流程的规范化产物，也是 HTML 唯一的内容基线。先将一份或多份方案 Markdown 中的事实按适用的数据规格规则重组为 Markdown，再生成 HTML；不要跳过规格 Markdown 直接从零拼 HTML。若用户提供了专门的规格模板或规则文件，以用户提供内容为准；否则使用本节结构，并根据实际内容增删小节，不得为了填模板而编造信息。
 
-| Skill | Owns | Does not replace |
-|---|---|---|
-| `data-development-docs` | Content model, business contract, processing truth, and field lineage | Visual composition or accessibility review |
-| `frontend-design` | Audience-specific design direction, visual hierarchy, typography, layout and design critique | Domain source consistency of pipeline rules |
-| `diagram-design` | Diagram type, node/edge semantics, topology, spacing and visual encoding | The document's complete explanation or field-level evidence |
-| `web-design-guidelines` | Focus, semantics, responsive behavior and interaction/accessibility audit | A distinctive visual concept |
+推荐的通用章节顺序：
 
-For a substantial HTML redesign, use `frontend-design`. Use `diagram-design` when a flow or lineage view materially improves comprehension. Use `web-design-guidelines` for a focused audit. Keep the data-document skill responsible for factual consistency and reader priorities.
+1. **方案标题与摘要**：明确业务对象、目标、核心数据流和结果。
+2. **需求与参考来源**：需求文档、外部参考、来源方案 Markdown；保留可点击链接或来源定位。
+3. **整体数据流程**：描述阶段顺序、分支、并行、汇合及输入输出关系。
+4. **阶段处理方案**：逐阶段说明业务目标、处理逻辑、读写对象和阶段间关系。
+5. **独立业务规则**：完整列举可单独讲解的判断，说明条件、处理、结果、例外和待确认项。
+6. **数据对象**：按角色与适用范围说明来源、配置、中间、结果等对象；库名、表名、用途及必要的 DDL 对应关系。
+7. **字段血缘**：逐目标字段说明业务含义、来源、推导、阶段及边界。
+8. **术语与待确认事项**：只在来源确有需要时保留。
 
-### Reference skill comparison for document-heavy HTML
+来源中的规格事实须在重组时保持含义不变。对重复内容去重，对冲突口径并列标注待确认；重要规则、数据对象和字段信息标出来源章节/文件或链接。规格 Markdown 不纳入实现 SQL、测试验证、进度、运行/部署状态、发布运维或数据使用者说明。不要把 HTML 生成说明写进业务规格正文。
 
-When choosing a design workflow, compare it against the artifact rather than choosing by visual ambition alone:
+## 稳定内容模型
 
-| Candidate | Strong fit | Tradeoff for data specifications | Decision |
-|---|---|---|---|
-| [Effective HTML](https://github.com/plannotator/effective-html) | Routes document, plan, diagram, and interface tasks to different workflows; keeps standalone artifacts responsive and self-contained | Broad collection; only the document/plan and diagram guidance is relevant here | **Preferred reference:** borrow its content-first routing and choose a document or diagram treatment by reading task |
-| [Huashu Design](https://github.com/alchaincyf/huashu-design) | Explores multiple visual directions, supplies a broad style library, and supports high-fidelity prototypes and multi-format design critique | Its style selection and prototype/animation breadth can distract from long-form rule and lineage lookup | Use when the user wants a visual concept exploration or polished prototype, not as the default for a dense specification |
-| Local `frontend-design` | Establishes a distinct visual direction and critiques generic layouts | Broad UI guidance; does not choose the right document structure or confirm data-flow semantics | Use for visual composition after the content hierarchy is set |
-| Local `diagram-design` | Provides diagram-specific topology and connector guidance | Solves the diagram portion only | Use for the overview flow or a focused relationship diagram |
+生成 HTML 前，先从输入 Markdown 建立一份规范化内容清单，再由同一份清单生成阶段导航、流程图、阶段详情、读写对象、业务逻辑专题、对象矩阵和字段血缘，避免重复手工维护导致关系漂移。清单至少包含标题摘要与来源链接；有序阶段、节点、前后关系、详情和读写对象；节点与数据对象的输入输出关系；全部独立业务逻辑及关联阶段；数据对象角色、输入中明确的适用范围、用途和 DDL 关系；字段血缘；未决口径及来源。
 
-This comparison is routing guidance, not a required external dependency. Choose the interface from its use: a reading task favors a navigable document, while a presentation or walkthrough should lead with the solution diagram and keep primary facts visible as one continuous story. Preserve project and user visual preferences over any reference style library.
+阶段、逻辑和对象使用仅供锚点联动的稳定内部键，不在画面中展示技术 ID、代号或人为编号。键名、标题和交叉引用须从同一清单生成。数量、名称和范围维度一律从当前输入取得，不预设固定值。
 
-### Stable page blueprint
+阶段导航、总图阶段区域、右侧详情和节点定位必须一一对应。图中连线须对应输入明确的数据对象关系或处理关系，不得虚构依赖。阶段读写对象与对象矩阵共用对象记录；未说明读写关系时标“待确认”。字段血缘仅采用 Markdown 或明确关联 DDL 支持的信息，不从 SQL、代码或运行库推测。
 
-Use this fixed page sequence for the presentation homepage unless the user explicitly requests another composition:
+## 主页面固定顺序
 
-1. **Persistent top navigation:** deliverable name at left; anchors to the table groups, overall flow, process details, and field lineage; a direct link to the full specification page. Keep it available while scrolling without obscuring content. On narrow screens, make all items reachable in a horizontal scroll row; do not hide the full-specification link or other destinations.
-2. **Title, project summary, and sources:** one subject-specific title. Under it, extract a concise project summary from the canonical specification: what is being proposed, which business scope it covers, what inputs it combines, what main result it produces, and any major proposal boundary. Link the requirements documents and non-project reference material directly below this summary. Keep project-internal sources (Markdown and DDL) near the details they support. Never describe HTML mechanics in the title or opening summary.
-3. **Test/formal table groups:** immediately after the title and source links, show separate test/development and formal table groups. Within each, distinguish source, configuration/dictionary, intermediate/core, and result tables. Give database-qualified object names, purpose, grain/key where defined, and mark objects as existing, proposed by DDL, or unresolved. Existing/proposed DDL is allowed. Do not place table names inside the flow diagram. Do not include implementation SQL names, joins, expressions, or execution steps in this homepage inventory.
-4. **Overall process:** show a rendered, readable diagram of the proposed end-to-end solution. Include all in-scope sources, main processing stages, major business decisions, merges, and result. Keep state selection separate from attribute collection until the specified merge. Clearly distinguish proposed scope from confirmed existing structures and unresolved inputs. Use concise Chinese labels and explain the main solution summary adjacent to the diagram.
-5. **Linked process and business details:** below the overview, explain business grain and scope, source-specific rules, ordering, precedence, exceptions, transformations, and unresolved decisions. Organize these details in the same stage order as the diagram. Link nodes to same-page detail anchors; a compact process rail beside the continuous article tracks and highlights the current stage. Never open a drawer, panel, modal, popover, or accordion. Keep the main rule at each stage visible, with secondary explanation following it. Detailed design DDL can be linked beside the table or rule it defines; implementation SQL is out of scope.
-6. **Field lineage:** show output field → source/value → derivation → process stage → important null/conflict behavior. Keep the essential outputs visible on the homepage and link to the full field specification for exhaustive mappings. Do not point lineage to implementation SQL.
-7. **Footer:** identify the canonical Markdown source as an actual relative HTML link, or omit the attribution. Do not print Markdown link syntax into HTML text.
+1. **标题和摘要**：中文业务标题；摘要只说明目标、核心数据流和结果对象。
+2. **需求与参考链接**：紧接标题摘要，显示可点击的需求来源和外部参考。链接名称使用业务可理解的中文。项目处理 SQL 不出现在页面；用户明确要求保留外部参考 SQL 时，只显示外部参考链接，不展示代码。
+3. **整体流程讲解**：页面视觉主体，左侧阶段栏、中间完整流程图、右侧当前阶段业务详情与表读取/写入。
+4. **关键业务逻辑**：紧随整体流程。把 Markdown 中所有能独立讲解的业务判断分别列项，不能只挑几条，也不能把不同条件揉成概览卡片。结论标题和一句摘要常显；详情在当前页原位展开。
+5. **数据对象矩阵**：独立于流程图。行按输入识别对象角色；列按输入明确的适用范围组织，如环境、阶段、地域或版本。标出库名、完整对象名、用途和 DDL 对应关系。
+6. **字段血缘**：按输出表字段列出含义、来源、推导、阶段、空值和冲突处理。
+7. **来源说明**：提供 Markdown 来源和相关 DDL/需求链接。
 
-This order is a content contract, not a demand for repeated cards. Use headings, tables, and a small number of meaningful grouped surfaces. The opening sequence should establish the project proposal and reference basis; readers then see the test/formal object design before following the process. The homepage is a solution presentation, not a SQL implementation catalogue.
+主页面只做数据方案展示。排除实施步骤、处理 SQL 内容、测试/验证、进度、运行状态、发布运维和数据使用者说明。
 
-### Persisted requirements for this document
+## 流程讲解布局
 
-Apply these choices whenever this skill is used for the user's data development/specification documents. They are confirmed requirements, not optional styling suggestions:
+### 三栏结构
 
-- Treat the deliverable as one combined data development document and data specification. Cover the overall solution, business specification, processing logic, and field lineage for business, development, and test readers. The homepage presents the solution proposal; do not add implementation SQL walkthroughs, test plans/results, verification, progress, acceptance, release, deployment, operations, or end-user/data-consumer sections to that homepage unless requested. Existing/proposed DDL can define structures and intended database placement. Keep the separate full specification in its established detailed role.
-- Keep two complementary reading views when HTML is requested: `index.html` is the presentation and walkthrough overview; a separate full-document page holds exhaustive detail. Both derive from the canonical Markdown and use consistent facts and terms.
-- The overview is one continuous page. Do not send readers to a side drawer, detail panel, modal, popover, accordion, or detached view. The diagram and detail sections share same-page anchors. Each diagram node links to its matching detail section; a narrow process rail beside the article highlights the current stage as the reader scrolls. On small screens, that rail becomes a horizontal anchor row.
-- Put the solution flow, source groups, key concerns, and important output fields at the initial reading level. Reveal finer-grained rules, object details, and lineage progressively farther down the page. Keep a persistent top menu with all destinations, including the full-document link, available on desktop and mobile; mobile may horizontally scroll the menu but must not hide destinations.
-- Use a title that names the data deliverable and subject, not HTML mechanics. Under the title, derive a project summary from the specification, then put clickable requirement and non-project reference links directly below it. Link project Markdown and DDL near the rule, step, or field they substantiate. Do not put implementation SQL in the presentation page. Never expose raw Markdown link notation in rendered HTML.
-- Show source, configuration/dictionary, intermediate/core, and result objects in a distinct inventory block, separate from the process diagram. State database and table names explicitly and distinguish test/development from formal environments. The diagram represents logical sources and transformations; do not embed database/table inventory in its nodes.
-- Include every in-scope source. Distinguish existing structures, proposed processing, and unresolved inputs without narrating implementation SQL. Keep status-candidate election separate from attribute collection (such as dates, terms, and event tags) until the documented merge step. Draw every input, operation, join, post-processing step, and output connection; leave no orphan output. For dense flows, add a focused explanatory diagram rather than omit a branch.
-- Use natural, context-appropriate Chinese for reader-facing descriptions. Preserve exact schema names, field names, SQL identifiers, and business codes where needed; do not mechanically translate identifiers or invent abbreviations/codes.
-- Render diagrams as visible SVG/HTML graphics, never as Mermaid source text. Keep labels inside nodes, with enough width and line wrapping; do not clip technical identifiers. Use clear, non-crossing routes, restrained colors, and thin rounded pale blue-gray connectors with small arrowheads. If animated, move subtle packets along the actual paths, retain the static lines, and disable motion for `prefers-reduced-motion`.
+- **左栏：阶段导航。** 每阶段展示序号、阶段名称和一句摘要。使用垂直细线/节点建立阶段序列；当前项通过文字颜色、字重和浅底色突出。
+- **中栏：整体数据流程。** 一个完整、纵向的 SVG/HTML 流程图贯穿全部阶段，完整图保持可见；图内标出主要处理节点、来源分支、合并、并行、汇合和结果。不要把总图拆成阶段小图，也不要在主节点中塞库表清单。
+- **右栏：阶段详情。** 显示阶段名称、摘要、业务细节和此阶段读写表。来源并行处理或同层规则应同时可见，避免只显示被拆开的单一路径。
 
-### Flow completeness and drawing rules
+### 滚动与联动
 
-Before drawing, write a compact edge list from the source facts: `input → operation → output`. Include separate edges for state selection and attribute aggregation when they are distinct. Compare every edge in that list with the rendered graph. A node does not count as connected because nearby prose describes its relationship.
+- 在流程区设置长滚动轨道和 sticky 三栏视图：桌面端顶部偏移可从约 78px 起调，视图高度为 `calc(100vh - 78px)`。轨道长度按实际阶段数和阅读节奏计算，不能固定假设阶段数或使用固定 500vh。
+- 页面滚动依据轨道进度切换当前阶段。左侧 `aria-current`、右侧详情、图中对应阶段浅色带同时更新。流程区结束后恢复普通页面滚动，继续到关键逻辑、库表矩阵和血缘。
+- 点击左侧阶段或图中节点可定位相应阶段；键盘 Enter/Space 可触发。焦点样式清楚，锚点预留 sticky 顶栏间距。
+- JavaScript 关闭或不可用时，所有阶段详情应仍可访问；不要让内容依赖 JS 后完全消失。
+- 窄屏时不要强行挤压三栏：阶段导航转为可横向滚动，流程图独立滚动或缩放到完整可读，详情排在图之后；整页不得产生无意义横向滚动。
 
-- Every in-scope input must either reach its documented processing step and output, or end at a clearly labeled “待接入/未确认” point. An input that is only in scope for a future design must not appear as implemented.
-- Each meaningful processing operation has its real inputs and outputs. Check both branches into a merge, the selection result into post-processing, and the post-processed result into the final table. No terminal output may be visually orphaned.
-- Keep status election and non-status attribute collection as parallel paths where the implementation does so. Join them only at the operation documented by SQL or the design. Do not infer that the winning status row supplies grant dates, tags, or other fields.
-- Use an explicit adjacent note or legend for implemented, planned, and unresolved paths; line style and color reinforce those labels but do not replace them.
-- Prefer a layered left-to-right flow with aligned stages, ample whitespace, and separate routing lanes. Route connectors behind nodes, avoid crossings and long loops, and split an overloaded overview into a small overview plus a focused detail diagram.
-- Keep database-qualified table names in the separate object inventory. The diagram names logical sources and processing stages; only include a table name in a node when the user specifically asks for a table relationship diagram.
-- For a hand-authored SVG, use a `viewBox`, responsive width, accessible `title` and `desc`, links for meaningful nodes, and explicit SVG paths for every edge. If the diagram becomes dense, use Graphviz/ELK or a second focused view rather than compressing labels.
+### 总图拓扑与连线
 
-### Visual defaults for this user's data documents
+- 按数据实际关系自上而下分层。分支同层对齐；正交折线优先；连线通过空白，不穿文字和节点，汇入/分叉点明确。
+- 流向由线上的移动动效表达，不用箭头。每条路线同时保留连续静态轨道与沿轨道移动的彩色短划线；平行路径错开动画相位。静态线应足够清晰，动线颜色明显，不能靠淡灰细线表达主要路径。
+- 当前阶段只叠加一层低饱和背景带（参考 `#e4edff`）突出相关区域。节点、静态线、动线的固有配色全程不变；非当前路径保持正常亮度。
+- SVG 节点标题、辅助文字和节点框一起检查。长中文需要换行或增大节点框，绝不溢出。图形须有 `title`、`desc`、键盘焦点和可理解的无障碍名称。
+- 使用 `prefers-reduced-motion: reduce` 时停止线条动画并留下连续、可辨识的静态流线。
 
-When the user has not requested a new visual direction, preserve the approved light, editorial technical-document style: pale gray-blue page background, white reading surfaces, dark navy text, muted blue-gray rules, restrained blue emphasis, thin rounded orthogonal connectors, small arrowheads, and generous gaps between stages. Avoid a generic dashboard/card grid, gradients, oversized metrics, or decorative color coding. Keep the diagram visually dominant but let rule and lineage tables remain easy to scan. These are defaults, not restrictions when a project already has an established design.
+## 独立逻辑专题
 
-When motion improves direction reading, animate a small packet along the actual SVG connector path (for example, an SVG `<circle>` with `<animateMotion>` and a path reference). Use different start offsets for simultaneous paths, low contrast and slow motion; keep the static connector visible. Respect `prefers-reduced-motion` by removing the packet animation while retaining arrowheads and paths. Do not use moving dashes that imply data on a connector that is not part of the actual flow.
+- 规则抽取以 Markdown 中每一项有独立条件或结果的判断为单位。同一主题下存在多个独立条件或结果时，分别建立专题；只有语义和适用边界都完全相同的条目才合并。
+- 每项用原生 `<details><summary>`，summary 始终可见并包含：短序号/组别、结论式标题、一句摘要。展开内容包含条件、动作、结果和例外/待确认点；一个 block 只讲一个逻辑。
+- 桌面端两列排版，以细分隔线组织，不做卡片墙；窄屏单列。展开在原位发生，不打开侧栏、不跳转、不覆盖其他逻辑。
+- 专题数量由输入内容决定，不能规定“最多几个”或只挑选代表项。每条都要回到对应流程阶段，并与阶段详情内容一致。
+- 详细规格页存在时，专题仍是主页独立讲解入口；点击专题不会离开主页。
 
-For a predictable continuous page, use one content column plus a narrow process-navigation rail on wide screens; center the page in a 1360–1480 px frame and let the page itself scroll. On narrow screens, make the navigation a horizontally scrollable anchor row and allow only diagrams/tables to scroll locally. Keep the full document as a separate page when it contains exhaustive rules or field mappings; use the same terms, object names, and facts on both pages.
+## 库表矩阵与字段血缘
 
-### Stable style specification
+### 数据对象矩阵
 
-Use these shared tokens and dimensions unless the project already has an established visual system. Keep them as CSS custom properties and reuse them; do not invent a new palette or spacing scale on each page.
+- 用 CSS Grid 或语义表格实现清楚的二维关系，绝不换成卡片集合。
+- 行按输入中的对象角色组织，常见为来源、配置、中间、结果；列按输入中的适用范围组织，例如环境、阶段、地域或版本。不得默认每个项目都有正式/测试列。
+- 空格需写“未列对象”或“待确认”。表名一律带库名，长标识可断行并可复制；不得裁切省略。
+- 每个对象说明用途、粒度/主键（Markdown 有提供时）和所处阶段。明确区分“方案目标”与“DDL 定义对象”，名称不一致就并列显示并标记待确认。
+- DDL 链接指向现存 DDL 文件；绝不引用已停用/被弃用的结构文件，除非用户明确要求比较。
 
-```css
-:root {
-  color-scheme: light;
-  --paper: #f5f7fa;
-  --surface: #ffffff;
-  --ink: #17243a;
-  --muted: #566a82;
-  --soft: #71839a;
-  --rule: #d9e2ec;
-  --line: #9aabc1;
-  --blue: #315fe8;
-  --blue-pale: #eff4ff;
-  --green-pale: #eff7f4;
-  --purple-pale: #f5f1fc;
-}
-```
+### 字段血缘
 
-- **Page frame:** centered maximum width 1360–1480 px; desktop side padding 40–44 px; narrow-screen side padding 16 px. Use one continuous article surface, not a dashboard of repeated cards.
-- **Persistent header:** 56–60 px high, sticky at the top, opaque enough for text beneath it to remain legible. Keep every navigation destination reachable. Reserve anchor offset of at least 76–84 px so headings are not covered.
-- **Type scale:** native system Chinese sans-serif stack; body 15 px with 1.65–1.7 line height; page title `clamp(36px, 4.4vw, 58px)` with 1.1–1.15 line height; section headings 21–23 px; table text 12–13 px; notes and navigation 10–12 px. Use monospace only for exact identifiers and schema names.
-- **Spacing:** use a 4/8 px rhythm. Major sections are separated by 36–44 px; table cells use 10–12 px vertical and 10–14 px horizontal padding; flow stages have visibly larger gaps than nodes. Do not use large empty hero areas that push the table/flow below the first reading screen.
-- **Tables:** light surface, thin `--rule` separators, restrained header tint, top-aligned text. On small screens scroll the table locally; preserve all column labels and identifiers. Never make the whole page scroll horizontally.
-- **Flow:** pale blue-gray rounded orthogonal connectors, 1.4–1.8 px static stroke, small arrowheads, and generous node padding. Use blue only for the selected state path, green for attribute aggregation, and a subdued secondary accent for output. Dashed borders/edges signal proposed or unresolved state only when a nearby text legend explains them. Avoid crossings, oversized labels, clipped text, card shadows, gradients, and animated dash patterns.
-- **Responsive behavior:** breakpoint around 660 px. Keep the top navigation horizontally scrollable without hiding items; move the process rail into a horizontal anchor strip; allow only wide diagrams and tables to scroll inside their own containers. Preserve the same section order and reading sequence on mobile.
-- **Motion and interaction:** ordinary anchors perform same-page navigation. Highlight the active process stage while scrolling; node links use the matching detail anchor. Use restrained packet motion only on real connector paths, retain the static routes, and disable animation under `prefers-reduced-motion`.
-- **Offline stability:** use inline SVG and local CSS/JavaScript. Do not rely on remote fonts, CDN scripts, or a network layout engine at read time. Avoid fragile absolute positioning for prose or labels; make SVG viewBox dimensions and node-label wrapping explicit.
+- 一行一个输出字段。最少列为：字段、来源与推导、处理阶段、空值/冲突边界。原规格更完整时保留所需信息，不把不同字段合并到同一行。
+- SQL/代码文件名不得充当字段来源；用库表字段、业务规则、映射或常量表达来源。未知口径写“待确认”。
 
-## Reader hierarchy
+## 完整规格页（仅用户明确要求时）
 
-Start from the audience's primary task. For data specification and development documents, use this default priority unless the user gives another order:
+- 完整规格页由同一 Markdown 转换，主页导航标“完整规格”，完整页导航提供“方案概览”返回。
+- 保留所有**范围内**规格细节并按章节阅读；范围外的实现、测试、进度和部署材料仍应剔除。不要复制主页的三栏讲解作为第二套布局。
+- 适用章节可包括：用途与范围、整体方案与数据流、业务规则、处理逻辑方案、输出字段血缘、库表与配置、JSON 字段契约、术语。
+- 按来源内容保留适用的详细规则表、优先级/枚举映射、处理规则、字段血缘、对象字段定义和配置契约；不预设特定业务的映射类型或环境名称。
+- 长规格页用窄侧边目录 + 宽阅读正文。目录点击定位章节；顶部栏 sticky；表格在窄屏局部横向滚动。
 
-1. **Overall solution:** purpose, scope, source systems, transformation stages, and outputs.
-2. **Business specification:** grain, keys, business rules, and unresolved decisions.
-3. **Processing logic:** ordered steps, selection/merge rules, edge cases, and implementation mapping.
-4. **Field lineage:** output field, origin, derivation, responsible step/code, and null/conflict/default behavior.
+## 中文、术语和标题
 
-Keep relevant schema/model details, decisions, and terminology available as supporting sections. Do not add test plans/results, validation, acceptance, progress, release, or operations sections unless the user asks for them. Business, development, and test readers should be able to interpret the specification; data consumers and end-user scenarios are not a default focus. Give the four core areas the strongest navigation and visual priority. Do not hide essential business rules behind accordions or put a long unstructured article ahead of the overview.
+- 用业务上下文中的自然中文，不把英文术语硬译成生僻名词。相同概念全页固定一个中文名；表、库、字段、代码值和产品名保持原样。
+- 标题说明业务对象和方案内容，不以 HTML、页面结构、版本号或内部代号命名。
+- 摘要下方仅放与方案有关的内容和来源链接；不写文档面向角色或系统功能介绍。
+- 条件、优先级、数值、日期边界、冲突、空值、fallback 都要保留；口径不一致显式标为待确认。
 
-## Design and composition
+## 固定视觉基线
 
-- Before coding, write a short design brief for yourself: subject, readers, primary reading task, visual direction, palette, type scale, layout, and treatment of the central diagram. Ground visual choices in the actual domain and any established user preference.
-- Put links to non-project source documents, standards, and reference material directly beneath the title introduction as a compact inline attribution. Keep it clickable and concise; do not create a separate references/resources section for it. In the homepage, cite project-internal Markdown and DDL near the relevant design detail; keep implementation SQL walkthroughs in the separate full specification, if they are part of its established content.
-- For a presentation or walkthrough, build one continuous page around the solution/lineage map. Show the main processing stages, source/configuration/core/result table groups, key business concerns, and important output-field paths in the page itself. Keep database/table inventory in a separate, clearly grouped block outside the process diagram; identify test/development-stage and formal-stage databases and full table names, and mark code references, DDL targets, and confirmed physical objects accurately. Put exhaustive rule text and field details on a separate specification page when useful. Keep the presentation page visual-first while ensuring its primary facts are visible together; both pages must reflect the same canonical facts.
-- Let information architecture drive the composition. Avoid generic SaaS card grids, decorative dashboard metrics, repeated eyebrow labels, and unrelated visual chrome. Use cards only when grouping is meaningful.
-- Make the presentation overview immediately useful: identify the deliverable and scope, show the true end-to-end path, and place the main tables, business concerns, and field paths in the same continuous page. Reserve a separate document link for exhaustive reference.
-- Preserve clear line lengths, whitespace, heading levels, and readable tables. On narrow screens, make wide diagrams and tables locally scrollable and keep navigation usable.
-- Prefer an offline-capable page. Avoid remote fonts and network dependencies. Use JavaScript only when a reader task benefits from it. Use motion when it makes flow direction or the relationship between the overview and current detail easier to follow; keep it restrained, make the static paths clear, and support `prefers-reduced-motion`.
-- After implementation, critique the page against the brief: can a reader identify scope quickly, follow the actual data path, find the four core sections, and trace an output field without guessing? Remove styling that competes with these tasks.
+- 输出为自包含 HTML：内嵌 CSS、SVG 和必要 JS，不用 CDN、远程字体、外部脚本或运行时构建。页面语义使用 `header/nav/main/section/aside/footer`，链接、表格、`details` 使用原生元素。
+- 采用浅灰蓝页面底色（主参考 `#f5f7fa`）、深蓝灰正文（`#17243a`）、白色阅读面、低对比度分隔线（`#d9e2ec`）。桌面主容器最大宽度约 1440px，左右留白约 36–38px；窄屏左右留白 14–15px。
+- 顶栏高约 60px，sticky，半透明白底和底部分隔线；主导航可横向滚动，不得被父容器裁切或随下拉消失。
+- 正文字号 15–16px 起，行高约 1.65；主体章节标题约 24px，阶段详情标题约 21px，逻辑专题标题约 17px。对象名使用等宽字并 `overflow-wrap:anywhere`。
+- 流程节点用高对比浅色背景和清晰描边，按业务角色选蓝、青、紫、绿、暖色或结果蓝；正文深色。避免灰蒙、低对比、无色相节点、过度渐变、装饰插画、仪表盘和卡片墙。
+- 专题区桌面两列，细线分隔；对象矩阵按实际范围列数自适应，保持行列关系清晰；血缘表格清楚易读。
+- `:focus-visible` 有明显焦点框；颜色不单独承担信息含义；固定定位不遮挡锚点。
 
-## Flow and lineage visuals
+## 转换完成清单
 
-- Model the actual data semantics. Distinguish sources, configuration/reference inputs, intermediate states, transformations, outputs, and read-only comparison targets.
-- For multi-source data, show candidate/state election separately from attribute fusion unless the implementation truly makes them the same operation. Draw both paths and their merge explicitly. Do not imply that the winning row supplies every output attribute unless verified.
-- Distinguish confirmed rules, current implementation, planned sources, and unresolved details in text; color alone is insufficient. Do not draw a planned source as part of the current implemented path.
-- Choose the diagram form and layout algorithm that fit the topology. For a static directed flow, Graphviz `dot` is a strong default: its layered layout aims edges in one direction and attempts to reduce crossings and edge length. For interactive layered diagrams needing orthogonal routing, ports, or compound groups, consider ELK Layered. For small hand-authored SVGs, apply the same ideas explicitly: order nodes by stage, align branches and joins, route connectors on separate lanes, and split dense views instead of routing every relationship through one crowded canvas. See [Graphviz `dot`](https://graphviz.org/docs/layouts/dot/), [Graphviz edge routing](https://graphviz.org/docs/attrs/splines/), and [Mermaid layout options](https://mermaid.ai/open-source/config/layouts.html).
-- Keep overview diagrams small, readable, and free of crossing connectors. If details become dense, retain a simple overview and link to focused tables or process details.
-- The overview and details must remain perceptually connected. In a continuous reading page, keep a compact side process navigation visible and link each item to its body anchor. Highlight the active stage from the section in view and associate each detailed section with its stage. This preserves context without opening a drawer or navigating away.
-- When a process node has a useful detail section, link the node to that same-page anchor and keep the side navigation, node highlight, and active detail stage in sync. Use ordinary anchors so keyboard readers can follow the relationship.
-- For animated flow lines, use a small number of moving packets along the actual connector routes, stagger their timing to avoid synchronized clutter, and color them to match their routes. Adjust static line weight and packet size for emphasis and readability. Honor `prefers-reduced-motion`; the diagram must remain understandable when motion is disabled.
-- Fit labels to nodes: wrap long labels across lines, widen/tall the node, or use a concise Chinese display label alongside the exact technical identifier. Never let text escape its box, hide overflow, or truncate a real table/field name.
-- Use natural, domain-appropriate Simplified Chinese for reader-facing concepts. Do not mechanically translate English source terms. Preserve exact technical identifiers and source-native codes. Keep a small consistent glossary when one English concept has multiple Chinese renderings.
-- For field lineage, make the trace inspectable: output field → source field/value → derivation → processing step or code → material edge behavior. Use a table when readers compare fields; use a graph only when relationships are clearer as a graph.
-- Check node labels, edge endpoints, and directions against the source document, code, and DDL.
-- If Markdown uses Mermaid or another diagram notation as its editable source, render a visual diagram in reader-facing HTML. Do not leave raw source such as `flowchart LR` as the visible flowchart.
-
-## Accessibility and interaction
-
-- Use semantic `header`, `nav`, `main`, `section`, headings, lists, tables, and links. Include a skip link, descriptive page title, unique section IDs, and a logical heading hierarchy.
-- Keep all core content reachable without JavaScript. Use links for navigation and buttons for actions. Make interactive controls keyboard operable and visibly focused.
-- Use interaction only when it supports the presentation task. Do not hide main-flow, table, business-rule, or lineage facts behind click-to-reveal panels when the page is meant to tell the complete story continuously.
-- Add a focused secondary diagram in the continuous presentation when branching logic, responsibility splits, or multi-hop field lineage is hard to explain in prose or a table. Keep it near the relevant part of the main flow and derive it from the same specification; do not duplicate the full overview or add decorative diagrams.
-- Ensure sticky navigation does not cover anchor headings or focused content. Respect `prefers-reduced-motion` whenever motion is present.
-- Give diagrams a useful accessible name and description; retain a text explanation or adjacent process table. Do not rely on color alone for state.
-- Check contrast, small-screen reflow, table overflow, and focus visibility. Avoid `transition: all` and hover-only meaning.
-
-## Verification
-
-- Parse the HTML; check document structure, unique IDs, valid local anchors, and any script syntax.
-- Reconcile headings, business rules, table/field names, scope labels, dates, and implementation statements against Markdown and source materials. HTML layout may reorder sections to support presentation or lookup, but it must not change facts.
-- Check that every navigation link resolves and that any search/filter control works by keyboard as well as pointer.
-- If a browser render is available and permitted, inspect a normal desktop width and a narrow width. Follow one route from the overview to a rule, process step, and field lineage detail.
-- Report source consistency boundaries. Parsing does not prove visual quality or semantic correctness; a screenshot does not prove source-to-field lineage. If browser inspection is unavailable or restricted, state that clearly and do not claim visual QA.
+- [ ] 标题和摘要只介绍业务方案；来源链接可点击且归属清楚。
+- [ ] 阶段清单、总图节点、阶段详情三者一一对应；阶段路径真实表达分支、合并、并行和输出。
+- [ ] 总图线无箭头，静态线和动线均清楚；动线方向正确；减少动态效果时流线依然完整。
+- [ ] 所有可独立讲解的业务规则均有独立专题，不限数量；每项有结论标题、摘要和完整条件/结果/边界。
+- [ ] 数据对象矩阵按输入中的角色分行、按实际适用范围分列；对象名称完整；DDL 差异标清。
+- [ ] 所有目标字段都在血缘表中；来源、推导、阶段、空值/冲突均可追溯到 Markdown。
+- [ ] 完整规格页只有在被要求时生成；主/完整页互链；内容保持方案范围。
+- [ ] 无实施 SQL 文件清单、测试验证、进度、部署/运行状态、清理/重跑步骤或数据使用者说明。
+- [ ] 页面内锚点、相对链接和阶段切换有效；无 JS 时内容可读；窄屏没有整页横向溢出。

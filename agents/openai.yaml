@@ -1,4 +1,4 @@
 interface:
-  display_name: "数据开发规格文档"
-  short_description: "把整体方案、业务规格、处理逻辑和字段血缘合成一份文档"
-  default_prompt: "使用 $data-development-docs，基于需求、代码和 DDL，为数据交付物创建或维护一份数据开发规格文档，重点说明整体方案、业务规格、处理逻辑和字段血缘。"
+  display_name: "数据方案转规格与 HTML"
+  short_description: "将方案 Markdown 规范为数据规格，再生成展示型 HTML"
+  default_prompt: "使用 $data-development-docs，将不同来源的数据方案 Markdown 按数据规格规则整理成可追溯的规格 Markdown，再从该规格生成讲解型 HTML；完整呈现业务逻辑、数据流、对象和血缘，只写方案内容。"
