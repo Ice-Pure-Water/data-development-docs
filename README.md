@@ -4,4 +4,4 @@
 
 产物包括规范化规格 Markdown 和方案主页 HTML。主页使用纵向主流程图，涵盖所有可独立讲解的业务逻辑、按“对象作用为行、适用范围为列”对齐展示的数据对象和字段血缘。对象区不用 HTML 表格或卡片。内容只描述方案，不呈现实现 SQL、测试验证、进度、部署运维或数据使用者说明。来源 Markdown 提供业务事实；DDL 仅用于说明结构。
 
-工作步骤见 [SKILL.md](SKILL.md)，页面内容模型、三栏联动、逻辑专题、数据对象清单、血缘及窄屏规则见 [HTML 阅读与交互规范](references/html-reading-view.md)。流程图关系建模、分层、正交路由、交叉消除、动效和几何检查见[内置流程图绘制方法](references/flow-diagram-method.md)；中文技术表达、语义 HTML 和视觉方向见[文字与视觉设计准则](references/writing-and-visual-design.md)。生成流程图时遵循本 skill 内置方法，无需额外加载 diagram-design。
+工作步骤见 [SKILL.md](SKILL.md)，页面内容模型、三栏联动、逻辑专题、数据对象清单、血缘及窄屏规则见 [HTML 阅读与交互规范](references/html-reading-view.md)。流程图关系建模、正交路由和交叉处理见[内置流程图绘制方法](references/flow-diagram-method.md)；文字层级、中文排版、阅读节奏和展示检查见[内置文字展示方法](references/text-display-method.md)；中文表达原则见[文字与视觉设计准则](references/writing-and-visual-design.md)。两类方法均已融入本 skill。
