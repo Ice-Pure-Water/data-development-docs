@@ -32,7 +32,7 @@ This comparison is routing guidance, not a required external dependency. Choose 
 
 Use this default page sequence for a presentation overview unless the user requests another composition:
 
-1. **Persistent top navigation:** deliverable name at left; anchors to overall flow, data objects, business rules, and field lineage; a direct link to the full specification page. Keep it available while scrolling without obscuring content.
+1. **Persistent top navigation:** deliverable name at left; anchors to overall flow, data objects, business rules, and field lineage; a direct link to the full specification page. Keep it available while scrolling without obscuring content. On narrow screens, make all items reachable in a horizontal scroll row; do not hide the full-specification link or other destinations.
 2. **Title and introduction:** one subject-specific title, a short paragraph explaining the data solution and its scope, then clickable external requirement/reference links immediately below. Do not put implementation details or HTML mechanics in the title.
 3. **Scope and implementation boundary:** state the business scope and current SQL/DDL boundary in plain language. Visually separate agreed requirements, implemented logic, planned inputs, and unresolved choices.
 4. **Overall process diagram:** a rendered, readable diagram showing the real source-to-result logic. Use concise Chinese labels with exact identifiers only where they help identify the stage. Explain the diagram’s key distinction in one adjacent sentence.
@@ -42,6 +42,20 @@ Use this default page sequence for a presentation overview unless the user reque
 8. **Footer:** identify the canonical Markdown source as an actual relative HTML link, or omit the attribution. Do not print Markdown link syntax into HTML text.
 
 This order is a content contract, not a demand for repeated cards. Use headings, tables, and a small number of meaningful grouped surfaces. The opening view should let a reader see the solution, object groups, key rules, and important result fields without opening a side panel.
+
+### Persisted requirements for this document
+
+Apply these choices whenever this skill is used for the user's data development/specification documents. They are confirmed requirements, not optional styling suggestions:
+
+- Treat the artifact as one combined data development document and data specification. Cover the overall solution, business specification, processing logic, and field lineage for business, development, and test readers. Do not add test plans/results, verification, progress, acceptance, release, operations, or end-user/data-consumer sections unless requested.
+- Keep two complementary reading views when HTML is requested: `index.html` is the presentation and walkthrough overview; a separate full-document page holds exhaustive detail. Both derive from the canonical Markdown and use consistent facts and terms.
+- The overview is one continuous page. Do not send readers to a side drawer, detail panel, modal, popover, accordion, or detached view. The diagram and detail sections share same-page anchors. Each diagram node links to its matching detail section; a narrow process rail beside the article highlights the current stage as the reader scrolls. On small screens, that rail becomes a horizontal anchor row.
+- Put the solution flow, source groups, key concerns, and important output fields at the initial reading level. Reveal finer-grained rules, object details, and lineage progressively farther down the page. Keep a persistent top menu with all destinations, including the full-document link, available on desktop and mobile; mobile may horizontally scroll the menu but must not hide destinations.
+- Use a title that names the data deliverable and subject, not HTML mechanics. Put clickable external/non-project references directly under the introduction. Link project Markdown, SQL, and DDL near the rule, step, or field they substantiate. Never expose raw Markdown link notation in rendered HTML.
+- Show source, configuration/dictionary, intermediate/core, and result objects in a distinct inventory block, separate from the process diagram. State database and table names explicitly and distinguish test/development from formal environments. The diagram represents logical sources and transformations; do not embed database/table inventory in its nodes.
+- Include every in-scope source. Distinguish current SQL behavior from planned or unconfirmed inputs. Keep status-candidate election separate from attribute collection (such as dates, terms, and event tags) until the documented merge step. Draw every real input, operation, join, post-processing step, and output connection; leave no orphan output. For dense flows, add a focused explanatory diagram rather than omit a branch.
+- Use natural, context-appropriate Chinese for reader-facing descriptions. Preserve exact schema names, field names, SQL identifiers, and business codes where needed; do not mechanically translate identifiers or invent abbreviations/codes.
+- Render diagrams as visible SVG/HTML graphics, never as Mermaid source text. Keep labels inside nodes, with enough width and line wrapping; do not clip technical identifiers. Use clear, non-crossing routes, restrained colors, and thin rounded pale blue-gray connectors with small arrowheads. If animated, move subtle packets along the actual paths, retain the static lines, and disable motion for `prefers-reduced-motion`.
 
 ### Flow completeness and drawing rules
 
