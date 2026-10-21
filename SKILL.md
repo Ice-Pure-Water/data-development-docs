@@ -1,46 +1,26 @@
 ---
 name: data-development-docs
-description: Transform one or more existing data proposal Markdown documents into a standardized data specification Markdown document, then generate a presentation-ready HTML page from it. Use when the user asks to organize proposal documents into a specification and create a coordinated HTML view. Do not implement processing logic.
+description: Turn existing data proposal Markdown into a traceable data specification Markdown and a coordinated presentation HTML. Use when restructuring data plans or generating their specification view. Does not implement data processing.
 metadata:
-  short-description: Standardize data proposal Markdown and generate presentation HTML
+  short-description: Convert data proposals into specifications and presentation HTML
 ---
 
-# 数据方案 Markdown 转规格文档与 HTML
+# 数据方案转规格文档与 HTML
 
-本 skill 的核心工作是把一种或多种用户提供的方案 Markdown，依据适用的数据规格文档规则，整理成结构统一、事实可追溯的数据规格 Markdown；然后以该规格 Markdown 为唯一内容来源生成展示型 HTML。它面向不同业务和项目，不预设行业、阶段数量、表名、逻辑条目、环境名称或字段。保留方案目标、业务规则、数据流、数据对象、字段血缘和明确的未决口径；排除实现 SQL、测试验证、进度、发布运维和数据使用者说明。
+把一份或多份方案 Markdown 整理成统一、可追溯的数据规格 Markdown，再从该 Markdown 生成展示型 HTML。面向不同业务，不预设阶段、表、字段、环境或规则数量。
 
 ## 工作步骤
 
-1. **确定规则与输入输出。** 确认来源方案 Markdown、适用的数据规格文档规则、规格 Markdown 输出路径、HTML 输出路径，以及用户是否要求独立完整规格 HTML。用户提供的规格模板/规则文件优先；未单独提供时，以本 skill 的规格结构与范围规则为默认标准。读取来源及其明确引用的需求材料；仅在说明结构需要时读取关联 DDL。不搜索处理 SQL、程序、运行记录或数据库状态。
-2. **抽取来源事实。** 逐份阅读来源 Markdown，建立带来源位置的事实清单，涵盖目标、数据流、阶段、数据对象、全部可独立说明的业务判断、字段血缘、术语、需求/参考链接、冲突和未决口径。所有数量和名称来自输入，不设固定值。
-3. **生成规范规格 Markdown。** 按数据规格规则重组来源事实，生成结构统一、可独立阅读、可编辑、可追溯的规格 Markdown。保留方案范围内的细节；相同事实去重，矛盾事实并列说明并标“待确认”，不自行选口径。重要事实应标注来源章节、文件或链接。Markdown 是最终事实基线，HTML 不作为编辑源。用中文写作与术语规则处理正文，详见[文字与视觉设计准则](references/writing-and-visual-design.md)。
-4. **规范表达并控制范围。** 只整理目标、数据流、处理规则、数据对象和字段来源。剔除实现文件名、SQL 表达式、清理/重跑方式、实际执行或部署状态、测试结果、进度、运维及用户说明。业务规则中的日期等条件应保留；中文术语按上下文统一。不得补写来源未支持的字段、条件或结论。
-5. **从规格 Markdown 生成主页。** 默认生成自包含 HTML，严格以刚生成或用户指定的规格 Markdown 为内容来源，并按 [HTML 阅读与交互规范](references/html-reading-view.md)、[diagram-design 图形规范及用户确认的逐线动效例外](references/flow-diagram-method.md)、[文字展示方法](references/text-display-method.md)和[文字与视觉设计准则](references/writing-and-visual-design.md)实现。先建立一致的文字角色和总览/讲解/细节/参考层级，再排版。主页呈现标题摘要、需求/参考链接、整体数据流程、全部可独立讲解的业务逻辑、按角色和适用范围组织的数据对象、字段血缘和方案来源。流程图必须从当前规格 Markdown 重建节点/边清单，并遵循 diagram-design 选型、预算、布局、配色、正交布线、跨线和动效规范；连接线无箭头；每条数据连线都保留完整静态底线，并叠加沿源到目标方向流动的线段，不用单个光点代替线动效。Markdown 阶段、阶段导航、SVG 阶段区域、右侧详情和读写对象必须由同一 canonical manifest 生成并逐键校验。不得沿用旧 HTML 的节点拓扑或只凭视觉直觉连线。逐项核对全部来源节点、阶段关系和连线；当前阶段联动须明显可辨，文字字号和对比度遵循文字展示契约。数据对象独立于流程图，以“表作用为行、适用范围为列”的对齐分区展示，不塞入流程节点，不做 HTML 表格或卡片。
-6. **按需生成完整规格 HTML。** 只有用户明确要求独立完整规格页时，才额外生成该 HTML 页面。完整页从同一规格 Markdown 转换，按章节组织并与主页互链，仍遵循方案范围。
-7. **表达链接与对象。** 需求文档和非本项目参考资料在标题摘要下方展示可点击名称。项目内 Markdown 可作方案来源链接；已有或设计中的 DDL 可在对象附近链接，并明确“方案目标”和“DDL 定义对象”的命名差异。项目处理 SQL 不作为页面链接或内容。若 Markdown 明确列出外部参考 SQL 且用户要求展示来源，可仅保留一个命名清楚的外部参考链接，不摘录 SQL、不把它当成本项目实现事实。
-8. **完成页面核对。** 对照 Markdown 内容清单检查所有阶段、业务规则、对象和字段均有归属；检查标题、交叉链接、锚点、相对 DDL/Markdown 链接、无脚本可读性和电脑端宽屏布局。只核对转换产物，不验证 SQL、数据库、业务结果或测试数据。
+1. 确定输入方案 Markdown、用户提供的规格规则/模板、规格 Markdown 和 HTML 的输出位置。只读取来源明确引用的需求材料；需要说明结构时可读取相关 DDL。
+2. 抽取目标、数据流、阶段、读写关系、所有可独立讲解的业务判断、数据对象、字段血缘、术语、链接、冲突和未决事项。记录重要事实的来源位置。
+3. 先生成规格 Markdown，再从它生成 HTML。用户提供的规格规则优先；否则按[内容与 HTML 规范](references/content-and-html.md)。Markdown 是事实基线，HTML 不作为编辑源。
+4. 写作和展示按[中文写作与展示规范](references/chinese-writing-and-display.md)；主流程图按[diagram-design 规则与来源](references/diagram-design.md)。需要某项参考时再读取对应文件。
+5. 对照 Markdown 核对阶段、关系、逻辑专题、数据对象、字段血缘和来源链接是否完整且相互一致。仅核对文档转换，不验证 SQL、数据库或业务结果。
 
-## 内容抽取清单
+## 范围
 
-- **标题摘要：** 业务对象、目标、主要数据流、结果对象。只写方案内容，不写“HTML 页面功能”“面向业务/开发/测试人员”或项目状态。
-- **来源与参考：** 需求文档、外部参考、项目 Markdown、DDL。标题下面列出需求和外部参考链接；对象相关 DDL 放在对象区。参考 SQL 仅按第 7 步保留其链接。
-- **整体流程：** 按输入的实际阶段和数据关系表达来源、处理、分支、并行、汇合和结果。主流程自上而下纵向展示，同层并行分支可横向并列后向下汇合。不得套用固定行业流程；流程节点表达业务处理，库名和表名放在右侧读写说明和独立对象清单。
-- **阶段联动：** 每个阶段必须在左侧有名称/摘要，在中央总览图有对应节点或区域，在右侧有详情及读取/写入对象。滚动、点击阶段和点击节点时，三处同步更新。
-- **独立关键逻辑：** 从 Markdown 的规则表、正文、条件、例外和待确认项逐条枚举所有可单独讲解的判断。每项至少有结论式标题、可见的一句摘要、展开后的条件/处理/结果/例外。细节彼此独立时分别成项；阶段详情仍保留上下文，不因专题重复而删除。
-- **数据对象：** 按二维关系组织，行表示对象作用，列表示适用范围。常见行包括来源、配置、中间、结果；列按输入内容确定，可为环境、阶段、地域或版本，不固定为正式/测试。采用对齐的行列分区和细分隔线，不使用 HTML 表格、卡片或卡片网格。每个交叉区逐项展示完整库表名、用途、粒度/主键和方案/DDL 关系；没有对象时写明“未列对象”或“待确认”。
-- **字段血缘：** 列出目标字段、业务含义/粒度、来源字段、推导规则、处理阶段、空值/冲突规则。依据 Markdown 和 DDL，不从 SQL 或程序补齐。
-- **完整规格页：** 只在被要求时按 Markdown 章节组织。可以包含业务规则表、代码/状态映射表、字段血缘、库表/配置表、JSON 契约和术语；这些表中的每行都要能回溯到来源 Markdown。
-
-## 范围边界
-
-- 输入是一种或多种既有方案 Markdown；输出包括规范化规格 Markdown 和从它生成的 HTML。不得把推测写成业务事实，不实现数据逻辑或编写处理 SQL。
-- 页面不呈现 SQL 内容、SQL 文件清单、测试计划/结果、运行验证、部署状态、发布运维、清理/重跑步骤或数据使用者说明。
-- 不把方案对象写成已部署对象。结构以对应 DDL 的声明为准；DDL 仅定义结构，不能证明数据库当前状态。
-- 数据对象适用范围以输入为准；测试结果、测试运行记录和验证状态不属于规格展示。
-- 中文名依上下文选取并贯穿页面；技术字段、表、库、代码值、日期和业务专名保持原文。首次出现英文缩写时可添加短中文解释。
-- 不在标题中放 V1/V2/V3、内部别名或项目代号。确有版本区分需求时，仅在规格元数据中按用户明确要求展示。
-
-## 参考
-
-- 规格 Markdown 结构、事实追溯，以及 HTML 页面结构、纵向三栏流程联动、逻辑专题、数据对象二维分区、无障碍和电脑端宽屏行为见 [HTML 阅读与交互规范](references/html-reading-view.md)。流程图以上游 [diagram-design](references/diagram-design-integration.md) 为规范来源；选图、执行方式和无箭头动效例外见[数据规格图执行规则](references/flow-diagram-method.md)。文字层级、分区排版、中文换行和可读性检查按[文字展示方法](references/text-display-method.md)执行；中文表达和视觉方向见[文字与视觉设计准则](references/writing-and-visual-design.md)。
-- 规范中的颜色、尺寸和交互数值是通用起点，应按内容密度和视口调整；不得把其他项目的业务事实复制到当前输入。
+- 只描述数据方案和规格。逻辑写方案，不写实现 SQL；可引用已有或设计中的 DDL 说明结构。
+- 不纳入实现 SQL 内容/文件清单、测试与验证、进度、运行或部署状态、发布运维、数据使用者说明。
+- 不把推测写成事实。冲突并列标“待确认”；DDL 不代表对象已部署。
+- 中文术语按业务语境选择并全文一致；技术标识、字段名、库表名、代码值和专名保留原文。
+- HTML 默认是自包含的电脑端讲解主页。只有用户明确要求时，才另生成互链的完整规格 HTML。
