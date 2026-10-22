@@ -30,11 +30,11 @@
 5. **字段血缘**：按目标字段说明含义、来源、推导规则、处理阶段和已知边界。
 6. **方案来源**：保留可点击的来源 Markdown、需求资料和相关 DDL 链接。
 
-业务阶段、主图区域、阶段详情和读写对象由同一内容清单生成；每条关系和逻辑都能回溯到规格 Markdown。所有项目复用同一页面骨架和视觉变量：[标准 HTML 模板](assets/html-page-template.html)。具体内容结构、固定样式和输出结构检查见[内容与 HTML 规范](references/content-and-html.md)。
+业务阶段、主图区域、阶段详情和读写对象由同一内容清单生成；每条关系和逻辑都能回溯到规格 Markdown。所有项目复用同一页面骨架和视觉变量：[标准 HTML 模板](assets/html-page-template.html)。生成后运行[HTML 一致性检查器](scripts/validate_html.py)，阻止样式和联动结构偏离模板。具体内容结构和图形 profile 见[内容与 HTML 规范](references/content-and-html.md)。
 
 ## 生成原则
 
-- 先整理规格 Markdown，再生成 HTML；不直接从零拼装 HTML。用户提供的格式或规则优先于默认结构。
+- 先整理规格 Markdown，再生成 HTML；不直接从零拼装 HTML。用户提供的规格格式决定 Markdown 的内容组织；HTML 始终使用本 skill 的固定主页与图形 profile。
 - 以来源为依据。重要事实保留出处；重复事实去重；来源冲突或缺少口径时明确列出，不自行选定。
 - 数据对象的角色与适用范围从输入提取，不预设“来源/配置/中间/结果”或“正式/测试”的固定集合。
 - 术语按业务上下文使用自然中文。技术标识、库表字段名、代码值及专名保留原文。
@@ -70,7 +70,7 @@ git clone https://github.com/Ice-Pure-Water/data-development-docs.git ~/.codex/s
 | --- | --- |
 | [diagram-design](https://github.com/cathrynlavery/diagram-design) | 架构图选型、拓扑、正交布线、样式和动效；按锁定版本执行，具体来源与数据规格适配见[图形规则](references/diagram-design.md)。 |
 | [zh-tech-writing](https://github.com/leter/zh-tech-writing) | 自然中文、短句、术语一致和技术表达。 |
-| [frontend-design](https://github.com/anthropics/skills/tree/main/skills/frontend-design) | 根据主题和讲解场景确定视觉方向，减少模板化设计。 |
+| [frontend-design](https://github.com/anthropics/skills/tree/main/skills/frontend-design) | 在已锁定的页面与图形 profile 内优化层级和阅读体验，不改换主题或布局。 |
 | [Effective HTML](https://github.com/plannotator/effective-html) 与 [Huashu Design](https://github.com/alchaincyf/huashu-design) | 内容优先、真实材料驱动排版和展示阅读方式的参考。 |
 | [MDN Semantic HTML](https://developer.mozilla.org/en-US/curriculum/core/semantic-html/) 与 [MDN HTML Accessibility](https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/Accessibility/HTML) | 语义结构、键盘访问和内容可访问性。 |
 
