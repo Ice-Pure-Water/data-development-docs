@@ -11,11 +11,11 @@ metadata:
 
 ## 工作步骤
 
-1. 确定输入方案 Markdown、用户提供的规格规则/模板、规格 Markdown 和 HTML 的输出位置。只读取来源明确引用的需求材料；需要说明结构时可读取相关 DDL。
+1. 确定输入方案 Markdown、用户提供的 Markdown 规格规则/模板、规格 Markdown 和 HTML 的输出位置。只读取来源明确引用的需求材料；需要说明结构时可读取相关 DDL。
 2. 抽取目标、数据流、阶段、读写关系、所有可独立讲解的业务判断、数据对象、字段血缘、术语、链接、冲突和未决事项。记录重要事实的来源位置。
-3. 先生成规格 Markdown，再从它生成 HTML。用户提供的规格规则优先；否则按[内容与 HTML 规范](references/content-and-html.md)。Markdown 是事实基线，HTML 不作为编辑源。
-4. 生成 HTML 时，必须以[标准页面模板](assets/html-page-template.html)为唯一页面骨架，按[HTML 内容与稳定性约定](references/content-and-html.md)填充；不得为不同项目另选主题或改成另一种页面布局。中文文字按[中文写作与展示规范](references/chinese-writing-and-display.md)组织，流程图按[diagram-design 规则与来源](references/diagram-design.md)绘制。
-5. 按稳定性约定逐项核对生成结构、内容清单、对象范围矩阵和来源链接。此项只检查 Markdown 到 HTML 的呈现一致性，不验证 SQL、数据库或业务结果。
+3. 先生成规格 Markdown，再从它生成 HTML。用户提供的规格格式只决定 Markdown 的内容组织；HTML 按[内容与 HTML 规范](references/content-and-html.md)转换。Markdown 是事实基线，HTML 不作为编辑源。
+4. 生成 HTML 时，必须以[标准页面模板](assets/html-page-template.html)为唯一主页骨架，按[HTML 内容与稳定性约定](references/content-and-html.md)填充；不同项目共用同一页面和流程图 profile。中文文字按[中文写作与展示规范](references/chinese-writing-and-display.md)组织；绘制流程图前调用安装的 diagram-design skill，并按[数据规格场景规则](references/diagram-design.md)适配。
+5. 运行 `python3 scripts/validate_html.py --diagram-self-check <diagram-design-skill>/scripts/self_check.py <主页.html>`。该检查器会抽出主流程 SVG 单独交给上游 self-check，避免主页面阶段联动脚本干扰检查；再按 diagram-design 几何规则检查交叉、重叠和文字越界。修复所有呈现偏差后再交付；不验证 SQL、数据库或业务结果。
 
 ## 范围
 
